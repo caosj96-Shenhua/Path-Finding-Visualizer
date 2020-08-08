@@ -5,8 +5,10 @@ import { dfs } from '../Algorithms/Dfs';
 import { astar, getNodesInShortestAstar } from '../Algorithms/astar';
 import { bfs } from '../Algorithms/Bfs';
 import { Nav, Navbar, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
-import { getInitialGrid, getNewGridWithWalToggled, createNode } from './Board/board';
+import { getInitialGrid, getNewGridWithWalToggled } from './Board/board';
 import './PathfindingVisualizer.css';
+import styled from 'styled-components';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 const START_NODE_ROW = 5;//10;
 const START_NODE_COL = 5;//15;
@@ -44,31 +46,40 @@ export default class PathfindingVisualizer extends Component {
     }
 
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
-        for (let i = 1; i < visitedNodesInOrder.length - 1; i++) {
+        for (let i = 0; i < visitedNodesInOrder.length - 1; i++) {
+            const node = visitedNodesInOrder[i];
+            if (i == 0) {
+                document.getElementById(`${node.row}-${node.col}`).className =
+                    'node node-visit-start';
+            }
+            else if (i > 0) {
+                setTimeout(() => {
+                    document.getElementById(`${node.row}-${node.col}`).className =
+                        'node node-visited';
+                }, 10 * i);
+            }
             if (i === visitedNodesInOrder.length - 2) {
                 setTimeout(() => {
                     this.animateShortestPath(nodesInShortestPathOrder);
                 }, 10 * i);
                 return;
             }
-            const node = visitedNodesInOrder[i];
-            setTimeout(() => {
-                document.getElementById(`${node.row}-${node.col}`).className =
-                    'node node-visited';
-                //    this.setState({ grid: newGrid });
-            }, 10 * i);
         }
     }
 
     animateAstar(visitedNodesInOrder, nodesInShortestPathOrder) {
-        for (let i = 1; i < visitedNodesInOrder.length - 1; i++) {
+        for (let i = 0; i < visitedNodesInOrder.length - 1; i++) {
             const node = visitedNodesInOrder[i];
-
-
-            setTimeout(() => {
+            if (i == 0) {
                 document.getElementById(`${node.row}-${node.col}`).className =
-                    'node node-visited';
-            }, 10 * i);
+                    'node node-visit-start';
+            }
+            else if (i > 0) {
+                setTimeout(() => {
+                    document.getElementById(`${node.row}-${node.col}`).className =
+                        'node node-visited';
+                }, 10 * i);
+            }
             if (i === visitedNodesInOrder.length - 2) {
                 setTimeout(() => {
                     this.animateShortestPath(nodesInShortestPathOrder);
@@ -90,12 +101,24 @@ export default class PathfindingVisualizer extends Component {
         }
     }
     animateShortestPath(nodesInShortestPathOrder) {
-        for (let i = 1; i < nodesInShortestPathOrder.length - 1; i++) {
-            setTimeout(() => {
-                const node = nodesInShortestPathOrder[i];
+        for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+            const node = nodesInShortestPathOrder[i];
+            if (i == 0) {
                 document.getElementById(`${node.row}-${node.col}`).className =
-                    'node node-shortest-path';
-            }, 50 * i);
+                    'node node-Real-start';
+            }
+            else if (i >= 1 && i < nodesInShortestPathOrder.length - 1) {
+                setTimeout(() => {
+                    document.getElementById(`${node.row}-${node.col}`).className =
+                        'node node-shortest-path';
+                }, 50 * i);
+            }
+            else {// if (i == nodesInShortestPathOrder.length - 1) {
+                setTimeout(() => {
+                    document.getElementById(`${node.row}-${node.col}`).className =
+                        'node node-Real-finish';
+                }, 50 * i);
+            }
         }
     }
 
@@ -148,18 +171,26 @@ export default class PathfindingVisualizer extends Component {
 
         return (
             <>
-                <button onClick={() => this.visualizeDijkstra()}>
-                    Visualize Dijkstra's Algorithm
-            </button>
-                <button onClick={() => this.visualizeDfs()}>
-                    Visualize DFS's Algorithm
-            </button>
-                <button onClick={() => this.visualizeAstar()}>
-                    Visualize Astar's Algorithm
-            </button>
-                <button onClick={() => this.clearPath()}>
-                    Clear Path
-            </button>
+                <Navbar bg="dark" variant="dark">
+
+                    <Navbar.Brand onClick={() => window.location.reload()}>PathfindingVisualizer</Navbar.Brand>
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="mr-auto">
+
+                            <Button variant="primary" onClick={() => { this.visualizeDijkstra() }}>Visualize Dijkstra's Algorithm
+                            </Button>
+                            <Button variant="primary" onClick={() => this.visualizeDijkstra()}>Visualize BFS's Algorithm
+                            </Button>
+                            <Button variant="primary" onClick={() => this.visualizeAstar()}>Visualize Astar's Algorithm
+                            </Button>
+                            <Button variant="success" onClick={() => window.location.reload()} > Generate New Board</Button>
+
+                        </Nav>
+
+
+                    </Navbar.Collapse>
+
+                </Navbar>
                 <div className="grid">
                     {grid.map((row, rowIdx) => {
                         return (

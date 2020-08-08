@@ -1,7 +1,4 @@
-// Performs Dijkstra's algorithm; returns *all* nodes in the order
-// in which they were visited. Also makes nodes point back to their
-// previous node, effectively allowing us to compute the shortest path
-// by backtracking from the finish node.
+
 
 export function dfs(grid, startNode, finishNode) {
     const visitedNodesInOrder = [];
@@ -25,7 +22,6 @@ export function dfs(grid, startNode, finishNode) {
             //    console.log(closestNode.row);
             // console.log(finishNode.col)
         } else {
-
         }
         */
         sortNodesByDistance(unvisitedNodes);
