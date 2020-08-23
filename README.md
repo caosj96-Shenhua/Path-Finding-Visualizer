@@ -1,3 +1,9 @@
+## Welocome to Path-Finding-Visualizer
+This project animate the process of a variety of searching algorithms such as Dijkstra’s algorithms, Breath-first search and Astar search algorithms. I hope that you enjoy playing around with this visualization tool just as much as I enjoyed building it.<br />
+
+
+You can access it here: https://caosj96-shenhua.github.io/Path-Finding-Visualizer/
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

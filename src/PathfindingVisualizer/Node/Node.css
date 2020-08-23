@@ -103,6 +103,20 @@
     animation-play-state: running;
   }
 
+  .node-visit-finish{
+    background-image:url(../img/stop.svg);
+    background-position: center;
+    background-size: contain;
+    animation-name: visitedAnimation;
+    animation-duration: 2.0s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+  }  
+
   @keyframes visitedAnimation {
     0% {
       transform: scale(0.3);

@@ -59,7 +59,7 @@ function updateNeighbors(grid, node, finishNode) {
         if (finishNode) {
             let distance = getDistance(node, neighbor);
             if (!neighbor.heuristicDistance) neighbor.heuristicDistance = manhattanDistance(neighbor, finishNode);
-            let distanceToCompare = node.distance + neighbor.weight/*weight*/ + distance[0];
+            let distanceToCompare = node.distance + /*neighbor.weightweight*/ + distance[0];//need to reset distance
             if (distanceToCompare < neighbor.distance) {
                 neighbor.distance = distanceToCompare;
                 neighbor.totalDistance = neighbor.distance + neighbor.heuristicDistance;
