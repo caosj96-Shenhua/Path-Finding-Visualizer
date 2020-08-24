@@ -8,22 +8,26 @@ import { Nav, Navbar, NavDropdown, Form, FormControl, Button } from 'react-boots
 import { getInitialGrid, getNewGridWithWalToggled } from './Board/board';
 import './PathfindingVisualizer.css';
 import {simpleMaze} from '../Maze/simpleMaze';
+import {recursiveMaze} from '../Maze/recursiveMaze';
+import {horizontalMaze} from '../Maze/horizontalMaze';
+import {verticalMaze} from '../Maze/verticalMaze';
 import styled from 'styled-components';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
+const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+const vh = Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+const height = Math.floor(vh / 28) - 8;
+const width = Math.floor(vw / 25);
 const START_NODE_ROW = 5;//10;
 const START_NODE_COL = 5;//15;
-const FINISH_NODE_ROW = 20; //10;
-const FINISH_NODE_COL = 35;//35;
+const FINISH_NODE_ROW = height - 6;
+const FINISH_NODE_COL = width - 6;
 const VISIT_SPEED = 10;
 const PATH_SPEED = 30;
 
 //const height = 25;
 //const width = 40;
-const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
-const vh = Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-let height = Math.floor(vh / 28) - 8;
-let width = Math.floor(vw / 25);
+
 
 export default class PathfindingVisualizer extends Component {
     constructor() {
@@ -121,7 +125,6 @@ export default class PathfindingVisualizer extends Component {
 
                 document.getElementById(`${node.row}-${node.col}`).className =
                     'node node-visited';
-                //    this.setState({ grid: newGrid });
             }, VISIT_SPEED * i);
         }
     }
@@ -152,25 +155,22 @@ export default class PathfindingVisualizer extends Component {
         for(let i = 0; i < wallsToAnimate.length; i++){
             const node = wallsToAnimate[i];
             setTimeout(() => {
-
                 document.getElementById(`${node.row}-${node.col}`).className =
                     'node node-wall';
-                //    this.setState({ grid: newGrid });
             }, VISIT_SPEED * i);            
-
         }
     }
 
+
+/*
     randomMaze(){
         const {grid} = this.state;
         const node = this.getAllNodes(grid);
             const random = Math.random();
             node.isWall = true;
             console.log(node);
-
-
     }
-
+*/
     visualizeDijkstra() {
         const { grid } = this.state;
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
@@ -202,25 +202,53 @@ export default class PathfindingVisualizer extends Component {
         const {grid} = this.state;
         const wallsToAnimate = simpleMaze(grid);
         this.animateMaze(wallsToAnimate);
+    }    
+    
+    visualizeRecursiveMaze(){
+        const {grid} = this.state;
+        const wallsToAnimate = [];
+        const surroundingWalls = false;
+        const orientation = "horizontal";
+        const wallAnimate = recursiveMaze(grid, 2, grid.length - 3, 2, grid[0].length -3,orientation,surroundingWalls, wallsToAnimate);
+        this.animateMaze(wallAnimate);
     }
 
-    clearPath() {
-        //   const grid = getInitialGrid();
-        //       this.setState({ grid });
+    visualizeHorizontalMaze(){
+        const {grid} = this.state;
+        const wallsToAnimate = [];
+        const surroundingWalls = false;
+        const orientation = "horizontal";
+        const wallAnimate = horizontalMaze(grid, 4, grid.length - 3, 2, grid[0].length -3,orientation,surroundingWalls, wallsToAnimate);
+        this.animateMaze(wallAnimate);
+    }
 
-        //      const nodes = [];
+    visualizeVerticalMaze(){
+        const {grid} = this.state;
+        const wallsToAnimate = [];
+        const surroundingWalls = false;
+        const orientation = "vertical";
+        const wallAnimate = verticalMaze(grid, 2, grid.length - 3, 2, grid[0].length -3,orientation,surroundingWalls, wallsToAnimate);
+        this.animateMaze(wallAnimate);
+    }
+
+  //  export function recursiveMaze(grid, rowStart, rowEnd, colStart, colEnd, surroundingWalls, wallsToAnimate) {
+
+
+    clearPath() {
         const { grid } = this.state;
 
         for (const row of grid) {
             for (const col of row) {
                 col.isVisited = false;
-
-                if (!col.isStart && !col.isFinish && !col.isWall) {
-                    //  console.log("find");
-                    col.distance = Infinity;
+                col.distance = Infinity;
+                col.totalDistance = Infinity;
+                col.heuristicDistance = null;
+                col.direction = null;
+                col.previousNode = null;
+          //      if (!col.isStart && !col.isFinish && !col.isWall) {
                     document.getElementById(`${col.row}-${col.col}`).className =
                         'node node-unvisited';
-                }
+           //     }
                 if (col.isStart) {
                     document.getElementById(`${col.row}-${col.col}`).className =
                         'node node-start';
@@ -229,12 +257,12 @@ export default class PathfindingVisualizer extends Component {
                     document.getElementById(`${col.row}-${col.col}`).className =
                         'node node-finish';
                 }
-                //   console.log(col);
-                /*        document.getElementById(`${col.row}-${col.col}`).className =
-                            'node node-unvisited';*/
+                if(col.isWall){
+                    document.getElementById(`${col.row}-${col.col}`).className =
+                        'node node-wall';                    
+                }
             }
         }
-        // return nodes;
 
     }
 
@@ -287,7 +315,13 @@ export default class PathfindingVisualizer extends Component {
                             </Button>
                             <Button variant="primary" onClick={() => this.visualizeAstar()}>Visualize Astar's Algorithm
                             </Button>                            
-                            <Button variant="primary" onClick={() => this.visualizeMaze()}>MAZE
+                            <Button variant="primary" onClick={() => this.visualizeMaze()}>Add Random Maze
+                            </Button>                            
+                            <Button variant="primary" onClick={() => this.visualizeRecursiveMaze()}>Add Recursive Maze
+                            </Button>
+                            <Button variant="primary" onClick={() => this.visualizeVerticalMaze()}>Add Vertical Maze
+                            </Button>
+                            <Button variant="primary" onClick={() => this.visualizeHorizontalMaze()}>Add Horizontal Maze
                             </Button>
                             <Button variant="success" onClick={() => window.location.reload()} > //</Button>
                             <Button variant="success" onClick={() => this.clearBoard()} > Generate New Board</Button>

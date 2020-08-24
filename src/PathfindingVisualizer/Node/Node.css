@@ -146,6 +146,10 @@
     background-color: rgb(12, 53, 71);
   }
 
+  .node-unvisited{
+    background-color: white;
+  }
+
  /* 
   .node-wall{
     animation-name: wallAnimation;

@@ -18,10 +18,17 @@ export function getInitialGrid(height, width) {
 
 export function createNode(col, row) {
 
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+    const vh = Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+    let height = Math.floor(vh / 28) - 8;
+    let width = Math.floor(vw / 25);
     const START_NODE_ROW = 5;
     const START_NODE_COL = 5;
-    const FINISH_NODE_ROW = 20;
-    const FINISH_NODE_COL = 35;
+    //   const FINISH_NODE_ROW = 20;
+    //   const FINISH_NODE_COL = 35; 
+    const FINISH_NODE_ROW = height - 6;
+    const FINISH_NODE_COL = width - 6;
+
     return {
         col,
         row,
