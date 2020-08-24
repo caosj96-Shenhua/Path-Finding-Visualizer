@@ -28,13 +28,15 @@ export function verticalMaze(grid, rowStart, rowEnd, colStart, colEnd, orientati
             possibleRows.push(number);
         }
         const possibleCols = [];
-        for (let number = colStart - 1; number <= colEnd; number += 2) {
+        for (let number = colStart - 1; number <= colEnd + 1; number += 2) {
             possibleCols.push(number);
         }
         const randomRowIndex = Math.floor(Math.random() * possibleRows.length);
         const randomColIndex = Math.floor(Math.random() * possibleCols.length);
+        //    const randomColIndex2 = Math.floor(Math.random() * possibleRows.length);
         const currentRow = possibleRows[randomRowIndex];
         const colRandom = possibleCols[randomColIndex];
+        //    const colRandom2 = possibleCols[randomColIndex2];
         const unvisitedNodes = getAllNodes(grid);
         while (unvisitedNodes.length) {
             const closestNode = unvisitedNodes.shift();
