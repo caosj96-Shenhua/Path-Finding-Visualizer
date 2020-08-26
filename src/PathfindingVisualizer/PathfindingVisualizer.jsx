@@ -12,7 +12,7 @@ import { recursiveMaze } from '../Maze/recursiveMaze';
 import { horizontalMaze } from '../Maze/horizontalMaze';
 import { verticalMaze } from '../Maze/verticalMaze';
 import styled from 'styled-components';
-//import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
 const vh = Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0)
@@ -295,11 +295,11 @@ export default class PathfindingVisualizer extends Component {
             <>
                 <Navbar bg="dark" variant="dark">
 
-                    <Navbar.Brand onClick={() => window.location.reload()}>PathfindingVisualizer</Navbar.Brand>
+                    <Navbar.Brand href="#home" onClick={() => window.location.reload()}>PathfindingVisualizer</Navbar.Brand>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
 
-                            <Button variant="primary" onClick={() => { this.visualizeDijkstra() }}>Visualize Dijkstra's Algorithm
+                            <Button variant="primary" size='sm' onClick={() => { this.visualizeDijkstra() }}>Visualize Dijkstra's Algorithm
                             </Button>
                             <Button variant="primary" onClick={() => this.visualizeDijkstra()}>Visualize BFS's Algorithm
                             </Button>
@@ -323,15 +323,39 @@ export default class PathfindingVisualizer extends Component {
                     </Navbar.Collapse>
 
                 </Navbar>
+
+                <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                    <Navbar.Brand href="#home" onClick={() => window.location.reload()}>PathfindingVisualizer</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
+                        <Nav className="mr-auto">
+                            <Nav.Link href="#features" size='sm' onClick={() => { this.visualizeDijkstra() }}>Visualize Dijkstra's Algorithm</Nav.Link>
+                            <Nav.Link href="#features" onClick={() => { this.visualizeDijkstra() }}>Visualize BFS's Algorithm</Nav.Link>
+                            <Nav.Link href="#features" onClick={() => { this.visualizeAstar() }}>Visualize Astar's Algorithm</Nav.Link>
+                            <NavDropdown title="Maze" id="collasible-nav-dropdown">
+                                <NavDropdown.Item onClick={() => this.visualizeMaze()}>Add Random Maze</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => this.visualizeRecursiveMaze()}>Add Recursive Maze</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => this.visualizeVerticalMaze()}>Add Vertical Maze</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => this.visualizeHorizontalMaze()}>Add Horizontal Maze</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                        <Nav>
+                            <Nav.Link href="#deets" onClick={() => this.clearPath()} > Clear Path</Nav.Link>
+                            <Nav.Link href="#deets" onClick={() => this.clearWall()} > Clear Wall</Nav.Link>
+
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
                 <div className="grid">
                     {grid.map((row, rowIdx) => {
                         return (
                             <div key={rowIdx}>
                                 {row.map((node, nodeIdx) => {
-                                    const { row, col, isFinish, isStart, isWall, isVisited, id } = node;
+                                    const { row, col, isFinish, isStart, isWall } = node;
                                     return (
                                         <Node
-                                            // id={row + col}
                                             key={nodeIdx}
                                             col={col}
                                             row={row}
@@ -342,7 +366,6 @@ export default class PathfindingVisualizer extends Component {
                                             onMouseDown={(row, col) => this.handleMouseDown(row, col)}
                                             onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
                                             onMouseUp={() => this.handleMouseUp()}
-                                        //      isVisited={isVisited}
                                         ></Node>
                                     );
                                 })}

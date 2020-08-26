@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
+import '../PathfindingVisualizer.css';
 
 const rowNumber = 25;
 const colNumber = 40;
 
 export function getInitialGrid(height, width) {
     const grid = [];
+    let tableHTML = "";
     for (let row = 0; row < height; row++) {
         const currentRow = [];
+        let currentHTMLRow = `<tr id="row ${row}">`;
         for (let col = 0; col < width; col++) {
             currentRow.push(createNode(col, row));
+            currentHTMLRow += `<td id="${createNode(col, row)}"></td>`;
+
         }
         grid.push(currentRow);
+        tableHTML += `${currentHTMLRow}</tr>`;
     }
+    let board = document.getElementById("grid");
+    //  board.innerHTML = tableHTML;
     return grid;
+    // return tableHTML;
 }
 
 
@@ -44,6 +53,7 @@ export function createNode(col, row) {
         isWall: false,
         previousNode: null,
     }
+
 }
 
 

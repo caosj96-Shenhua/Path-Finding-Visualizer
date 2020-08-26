@@ -1,9 +1,11 @@
 .node {
     width: 25px;
     height: 25px;
-    outline: 0.5px solid rgb(175, 216, 248);
-  /*  display: inline-block;*/
-    display: inline-table;
+    display: table-cell;
+   /* border: 0.5px solid rgb(175, 216, 248);*/
+    border: 1px solid rgb(175, 192, 248);
+
+  /*   display: table;*/
 }
 
 .node-finish {
@@ -80,6 +82,8 @@
   }
   .node-visited{
       animation-name: visitedAnimation;
+      background-position: center;
+      background-size: contain;
       animation-duration: 1.5s;
       animation-timing-function: ease-in-out;
       animation-delay: 0;
@@ -181,7 +185,6 @@
 */
   .node-shortest-path {
     background-repeat: no-repeat;
-
     animation-name: shortestPath;
     animation-duration: 1.5s;
     animation-timing-function: ease-out;
@@ -190,6 +193,7 @@
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     animation-play-state: running;
+
   }
   
   @keyframes shortestPath {
