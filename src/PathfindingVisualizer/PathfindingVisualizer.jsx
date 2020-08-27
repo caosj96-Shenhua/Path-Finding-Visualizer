@@ -325,7 +325,7 @@ export default class PathfindingVisualizer extends Component {
 
         return (
             <>
-                {/* 
+
                 <Navbar bg="dark" variant="dark">
 
                     <Navbar.Brand href="#home" onClick={() => window.location.reload()}>PathfindingVisualizer</Navbar.Brand>
@@ -356,7 +356,7 @@ export default class PathfindingVisualizer extends Component {
                     </Navbar.Collapse>
 
                 </Navbar>
-                */}
+
 
                 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                     <Navbar.Brand className="brandStyle" href="#home" onClick={() => window.location.reload()}>PathfindingVisualizer</Navbar.Brand>
