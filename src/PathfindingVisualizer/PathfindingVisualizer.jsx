@@ -3,6 +3,7 @@ import Node from './Node/Node';
 import { dijkstra, getNodesInShortestPathOrder } from '../Algorithms/Dijkstra';
 import { dfs } from '../Algorithms/Dfs';
 import { astar, getNodesInShortestAstar } from '../Algorithms/astar';
+import { greedy, getNodesInShortestGreedy } from '../Algorithms/greedy';
 import { bfs } from '../Algorithms/Bfs';
 import { Nav, Navbar, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import { getInitialGrid, getNewGridWithWalToggled } from './Board/board';
@@ -18,7 +19,7 @@ import RangeSlider from 'react-bootstrap-range-slider';
 
 const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
 const vh = Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-const height = Math.floor(vh / 28) - 8;
+const height = Math.floor(vh / 28) - 4;
 const width = Math.floor(vw / 25);
 const START_NODE_ROW = 5;//10;
 const START_NODE_COL = 5;//15;
@@ -115,14 +116,32 @@ export default class PathfindingVisualizer extends Component {
                 }, this.state.VISIT_SPEED * i);
                 return;
             }
-            if (node.isVisited) {
-                console.log("find");
+        }
+    }
+
+    animateGreedy(visitedNodesInOrder, nodesInShortestPathOrder) {
+        for (let i = 0; i < visitedNodesInOrder.length - 1; i++) {
+            const node = visitedNodesInOrder[i];
+            if (i == 0) {
+                document.getElementById(`${node.row}-${node.col}`).className =
+                    'node node-visit-start';
+            }
+            else if (i > 0) {
+                setTimeout(() => {
+                    document.getElementById(`${node.row}-${node.col}`).className =
+                        'node node-visited';
+                }, this.state.VISIT_SPEED * i);
+            }
+            if (i == visitedNodesInOrder.length - 2) {
+                setTimeout(() => {
+                    this.animateShortestPath(nodesInShortestPathOrder);
+                }, this.state.VISIT_SPEED * i);
+                return;
             }
         }
     }
 
     animateDfs(visitedNodesInOrder/*, nodesInShortestPathOrder*/) {
-        //console.log(visitedNodesInOrder.length);
         for (let i = 1; i < visitedNodesInOrder.length - 1; i++) {
             const node = visitedNodesInOrder[i];
             setTimeout(() => {
@@ -190,6 +209,15 @@ export default class PathfindingVisualizer extends Component {
         const visitedNodesInOrder = astar(grid, startNode, finishNode);
         const nodesInShortestPathOrder = getNodesInShortestAstar(finishNode);
         this.animateAstar(visitedNodesInOrder, nodesInShortestPathOrder);
+    }
+
+    visualizeGreedy() {
+        const { grid } = this.state;
+        const startNode = grid[START_NODE_ROW][START_NODE_COL];
+        const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+        const visitedNodesInOrder = greedy(grid, startNode, finishNode);
+        const nodesInShortestPathOrder = getNodesInShortestGreedy(finishNode);
+        this.animateGreedy(visitedNodesInOrder, nodesInShortestPathOrder);
     }
 
     visualizeMaze() {
@@ -338,6 +366,7 @@ export default class PathfindingVisualizer extends Component {
                             <Nav.Link onClick={() => { this.visualizeDijkstra() }}>Visualize Dijkstra's Algorithm</Nav.Link>
                             <Nav.Link onClick={() => { this.visualizeDijkstra() }}>Visualize BFS's Algorithm</Nav.Link>
                             <Nav.Link onClick={() => { this.visualizeAstar() }}>Visualize Astar's Algorithm</Nav.Link>
+                            <Nav.Link onClick={() => { this.visualizeGreedy() }}>Visualize Greedy's Algorithm</Nav.Link>
                             <NavDropdown title="Maze" id="collasible-nav-dropdown">
                                 <NavDropdown.Item onClick={() => this.visualizeMaze()}>Add Random Maze</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => this.visualizeRecursiveMaze()}>Add Recursive Maze</NavDropdown.Item>
@@ -352,8 +381,8 @@ export default class PathfindingVisualizer extends Component {
 
                             <RangeSlider className="speed-slider"
                                 value={this.state.VISIT_SPEED}
-                                min={1}
-                                max={20}
+                                min={5}
+                                max={30}
                                 step={1}
                                 tooltipPlacement='bottom'
                                 tooltip={false}

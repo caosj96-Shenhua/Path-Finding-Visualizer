@@ -1,24 +1,22 @@
 import React, { Component } from 'react';
 import '../PathfindingVisualizer.css';
 
-const rowNumber = 25;
-const colNumber = 40;
 
 export function getInitialGrid(height, width) {
     const grid = [];
     let tableHTML = "";
     for (let row = 0; row < height; row++) {
         const currentRow = [];
-        let currentHTMLRow = `<tr id="row ${row}">`;
+        //  let currentHTMLRow = `<tr id="row ${row}">`;
         for (let col = 0; col < width; col++) {
             currentRow.push(createNode(col, row));
-            currentHTMLRow += `<td id="${createNode(col, row)}"></td>`;
+            //      currentHTMLRow += `<td id="${createNode(col, row)}"></td>`;
 
         }
         grid.push(currentRow);
-        tableHTML += `${currentHTMLRow}</tr>`;
+        //      tableHTML += `${currentHTMLRow}</tr>`;
     }
-    let board = document.getElementById("grid");
+    //let board = document.getElementById("grid");
     //  board.innerHTML = tableHTML;
     return grid;
     // return tableHTML;
@@ -29,7 +27,7 @@ export function createNode(col, row) {
 
     const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
     const vh = Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-    let height = Math.floor(vh / 28) - 8;
+    let height = Math.floor(vh / 28) - 4;
     let width = Math.floor(vw / 25);
     const START_NODE_ROW = 5;
     const START_NODE_COL = 5;
