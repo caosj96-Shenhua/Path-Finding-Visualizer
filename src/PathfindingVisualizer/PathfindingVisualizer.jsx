@@ -13,6 +13,8 @@ import { horizontalMaze } from '../Maze/horizontalMaze';
 import { verticalMaze } from '../Maze/verticalMaze';
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import RangeSlider from 'react-bootstrap-range-slider';
+
 
 const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
 const vh = Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0)
@@ -22,7 +24,7 @@ const START_NODE_ROW = 5;//10;
 const START_NODE_COL = 5;//15;
 const FINISH_NODE_ROW = height - 6;
 const FINISH_NODE_COL = width - 6;
-const VISIT_SPEED = 10;
+//const VISIT_SPEED = 10;
 const PATH_SPEED = 30;
 
 //const height = 25;
@@ -37,6 +39,8 @@ export default class PathfindingVisualizer extends Component {
             START_NODE_ROW: 5,
             START_NODE_COL: 5,
             mouseIsPressed: false,
+            VISIT_SPEED: 10,
+            PATH_SPEED: 30,
         };
     }
 
@@ -72,12 +76,12 @@ export default class PathfindingVisualizer extends Component {
                 setTimeout(() => {
                     document.getElementById(`${node.row}-${node.col}`).className =
                         'node node-visited';
-                }, VISIT_SPEED * i);
+                }, this.state.VISIT_SPEED * i);
             }
             if (i === visitedNodesInOrder.length - 2) {
                 setTimeout(() => {
                     this.animateShortestPath(nodesInShortestPathOrder);
-                }, VISIT_SPEED * i);
+                }, this.state.VISIT_SPEED * i);
                 return;
             }
         }
@@ -95,7 +99,7 @@ export default class PathfindingVisualizer extends Component {
                 setTimeout(() => {
                     document.getElementById(`${node.row}-${node.col}`).className =
                         'node node-visited';
-                }, VISIT_SPEED * i);
+                }, this.state.VISIT_SPEED * i);
             }
             /*
             else if (i == nodesInShortestPathOrder.length - 1) {
@@ -108,7 +112,7 @@ export default class PathfindingVisualizer extends Component {
             if (i == visitedNodesInOrder.length - 2) {
                 setTimeout(() => {
                     this.animateShortestPath(nodesInShortestPathOrder);
-                }, VISIT_SPEED * i);
+                }, this.state.VISIT_SPEED * i);
                 return;
             }
             if (node.isVisited) {
@@ -125,7 +129,7 @@ export default class PathfindingVisualizer extends Component {
 
                 document.getElementById(`${node.row}-${node.col}`).className =
                     'node node-visited';
-            }, VISIT_SPEED * i);
+            }, this.state.VISIT_SPEED * i);
         }
     }
 
@@ -157,7 +161,7 @@ export default class PathfindingVisualizer extends Component {
             setTimeout(() => {
                 document.getElementById(`${node.row}-${node.col}`).className =
                     'node node-wall';
-            }, VISIT_SPEED * i);
+            }, this.state.VISIT_SPEED * i);
         }
     }
 
@@ -293,6 +297,7 @@ export default class PathfindingVisualizer extends Component {
 
         return (
             <>
+                {/* 
                 <Navbar bg="dark" variant="dark">
 
                     <Navbar.Brand href="#home" onClick={() => window.location.reload()}>PathfindingVisualizer</Navbar.Brand>
@@ -323,29 +328,50 @@ export default class PathfindingVisualizer extends Component {
                     </Navbar.Collapse>
 
                 </Navbar>
+                */}
 
                 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                    <Navbar.Brand href="#home" onClick={() => window.location.reload()}>PathfindingVisualizer</Navbar.Brand>
+                    <Navbar.Brand className="brandStyle" href="#home" onClick={() => window.location.reload()}>PathfindingVisualizer</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="mr-auto">
-                            <Nav.Link href="#features" size='sm' onClick={() => { this.visualizeDijkstra() }}>Visualize Dijkstra's Algorithm</Nav.Link>
-                            <Nav.Link href="#features" onClick={() => { this.visualizeDijkstra() }}>Visualize BFS's Algorithm</Nav.Link>
-                            <Nav.Link href="#features" onClick={() => { this.visualizeAstar() }}>Visualize Astar's Algorithm</Nav.Link>
+                            <Nav.Link onClick={() => { this.visualizeDijkstra() }}>Visualize Dijkstra's Algorithm</Nav.Link>
+                            <Nav.Link onClick={() => { this.visualizeDijkstra() }}>Visualize BFS's Algorithm</Nav.Link>
+                            <Nav.Link onClick={() => { this.visualizeAstar() }}>Visualize Astar's Algorithm</Nav.Link>
                             <NavDropdown title="Maze" id="collasible-nav-dropdown">
                                 <NavDropdown.Item onClick={() => this.visualizeMaze()}>Add Random Maze</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => this.visualizeRecursiveMaze()}>Add Recursive Maze</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => this.visualizeVerticalMaze()}>Add Vertical Maze</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => this.visualizeHorizontalMaze()}>Add Horizontal Maze</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                                <NavDropdown.Item >Separated link</NavDropdown.Item>
                             </NavDropdown>
-                        </Nav>
-                        <Nav>
-                            <Nav.Link href="#deets" onClick={() => this.clearPath()} > Clear Path</Nav.Link>
-                            <Nav.Link href="#deets" onClick={() => this.clearWall()} > Clear Wall</Nav.Link>
+                            <Nav.Link eventKey="disabled" disabled>   Animation Speed(ms)</Nav.Link>
+                            <Nav.Link eventKey="disabled" disabled>FAST</Nav.Link>
+
+
+                            <RangeSlider className="speed-slider"
+                                value={this.state.VISIT_SPEED}
+                                min={1}
+                                max={20}
+                                step={1}
+                                tooltipPlacement='bottom'
+                                tooltip={false}
+                                reverse={true}
+
+                                size='sm'
+                                onChange={changeEvent => this.setState({ VISIT_SPEED: changeEvent.target.value })}>
+                            </RangeSlider>
+                            <Nav.Link eventKey="disabled" disabled> SLOW</Nav.Link>
 
                         </Nav>
+                        <Nav>
+                            <Nav.Link onClick={() => this.clearPath()} > Clear Path</Nav.Link>
+                            <Nav.Link onClick={() => this.clearWall()} > Clear Wall</Nav.Link>
+
+                        </Nav>
+
+
                     </Navbar.Collapse>
                 </Navbar>
                 <div className="grid">

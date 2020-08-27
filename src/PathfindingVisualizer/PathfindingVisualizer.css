@@ -9,10 +9,12 @@
     .navbar-toggle {
         display: block;
     }
+    /*
     .navbar-collapse {
         border-top: 1px solid transparent;
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
     }
+    */
     .navbar-collapse.collapse {
     
         display: none!important;
@@ -25,18 +27,7 @@
         font-weight: bolder;
       
       }
-    .navbar-nav>li {
-        float: none;
-    }
-    .navbar-nav>li>a {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-    .navbar-text {
-        float: none;
-        margin: 15px 0;
-        font-size: 10vw;
-    }
+
     .navbar-collapse.collapse.in { 
         display: block!important;
     }
@@ -49,7 +40,19 @@
     }
 
     .navbar-brand.brand{
-      background-color: red;
-      font-size: 10vw;
+      font-size: 15vw;
 
+    }
+
+    .brandStyle{
+      font-size: 10px;
+      font-weight: bolder;
+    }
+
+    .speed-slider{
+      background-color: lightcoral;
+    }
+
+    .mr-auto{
+      color: lightcoral;
     }
